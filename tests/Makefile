@@ -1,35 +1,7 @@
 # Makefile for the pthreads test suite.
 # If all of the .pass files can be created, the test suite has passed.
-#
-# --------------------------------------------------------------------------
-#
-#      Pthreads4w - POSIX Threads Library for Win32
-#      Copyright(C) 1998 John E. Bossom
-#      Copyright(C) 1999,2012 Pthreads4w contributors
-# 
-#      The current list of contributors is contained
-#      in the file CONTRIBUTORS included with the source
-#      code distribution. The list can also be seen at the
-#      following World Wide Web location:
-#      https://sourceforge.net/projects/pthreads4w//contributors.html
-# 
-#      This library is free software; you can redistribute it and/or
-#      modify it under the terms of the GNU Lesser General Public
-#      License as published by the Free Software Foundation; either
-#      version 2 of the License, or (at your option) any later version.
-# 
-#      This library is distributed in the hope that it will be useful,
-#      but WITHOUT ANY WARRANTY; without even the implied warranty of
-#      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#      Lesser General Public License for more details.
-# 
-#      You should have received a copy of the GNU Lesser General Public
-#      License along with this library in the file COPYING.LIB;
-#      if not, write to the Free Software Foundation, Inc.,
-#      59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-#
 
-PTW32_VER	= 2$(EXTRAVERSION)
+PTW32_VER	= 3$(EXTRAVERSION)
 
 CC = cl /errorReport:none /nologo
 
@@ -51,7 +23,7 @@ OPTIM	= /O2 /Ob0
 XXLIBS	= ws2_32.lib
 
 # C++ Exceptions
-VCEFLAGS	= /EHs /TP /DPtW32NoCatchWarn /D__CLEANUP_CXX
+VCEFLAGS	= /EHs /TP /D__PtW32NoCatchWarn /D__PTW32_CLEANUP_CXX
 VCELIB	= libpthreadVCE$(PTW32_VER).lib
 VCEIMP	= pthreadVCE$(PTW32_VER).lib
 VCEDLL	= pthreadVCE$(PTW32_VER).dll
@@ -59,7 +31,7 @@ VCELIBD	= libpthreadVCE$(PTW32_VER)d.lib
 VCEIMPD	= pthreadVCE$(PTW32_VER)d.lib
 VCEDLLD	= pthreadVCE$(PTW32_VER)d.dll
 # Structured Exceptions
-VSEFLAGS	= /D__CLEANUP_SEH
+VSEFLAGS	= /D__PTW32_CLEANUP_SEH
 VSELIB	= libpthreadVSE$(PTW32_VER).lib
 VSEIMP	= pthreadVSE$(PTW32_VER).lib
 VSEDLL	= pthreadVSE$(PTW32_VER).dll
@@ -67,7 +39,7 @@ VSELIBD	= libpthreadVSE$(PTW32_VER)d.lib
 VSEIMPD	= pthreadVSE$(PTW32_VER)d.lib
 VSEDLLD	= pthreadVSE$(PTW32_VER)d.dll
 # C cleanup code
-VCFLAGS	= /D__CLEANUP_C
+VCFLAGS	= /D__PTW32_CLEANUP_C
 VCLIB	= libpthreadVC$(PTW32_VER).lib
 VCIMP	= pthreadVC$(PTW32_VER).lib
 VCDLL	= pthreadVC$(PTW32_VER).dll
@@ -75,7 +47,7 @@ VCLIBD	= libpthreadVC$(PTW32_VER)d.lib
 VCIMPD	= pthreadVC$(PTW32_VER)d.lib
 VCDLLD	= pthreadVC$(PTW32_VER)d.dll
 # C++ Exceptions in application - using VC version of pthreads dll
-VCXFLAGS	= /EHs /TP /D__CLEANUP_C
+VCXFLAGS	= /EHs /TP /D__PTW32_CLEANUP_C
 
 # Defaults
 CPLIB	= $(VCLIB)
@@ -232,6 +204,8 @@ clean:
 	if exist *.manifest $(RM) *.manifest
 	if exist *.pass $(RM) *.pass
 	if exist *.bench $(RM) *.bench
+
+realclean: clean
 	if exist *.log $(RM) *.log
 
 .c.pass:

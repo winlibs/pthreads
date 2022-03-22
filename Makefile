@@ -5,7 +5,7 @@
 
 # PTW32_VER:
 # See pthread.h and README for the description of version numbering.
-PTW32_VER	= 2$(EXTRAVERSION)
+PTW32_VER	= 3$(EXTRAVERSION)
 PTW32_VER_DEBUG= $(PTW32_VER)d
 
 DESTROOT	= ..\PTHREADS-BUILT
@@ -33,7 +33,7 @@ CFLAGSD	= /W3 /Z7 $(XCFLAGS)
 #XLIBS = wsock32.lib
 
 # Default cleanup style
-CLEANUP	= __CLEANUP_C
+CLEANUP	= __PTW32_CLEANUP_C
 
 # C++ Exceptions
 # (Note: If you are using Microsoft VC++6.0, the library needs to be built
@@ -119,76 +119,76 @@ all-tests-static:
 
 all-tests-md:
 	@ -$(SETENV)
-	$(MAKE) all-tests-dll XCFLAGS="/W3 /WX /MD"
+	$(MAKE) all-tests-dll
 !IF DEFINED(EXHAUSTIVE)
-	$(MAKE) all-tests-dll XCFLAGS="/W3 /WX /MDd" XDBG="-debug"
+	$(MAKE) all-tests-dll XDBG="-debug"
 !ENDIF
 	@ echo $@ completed successfully.
 
 all-tests-mt:
 	@ -$(SETENV)
-	$(MAKE) all-tests-static XCFLAGS="/W3 /WX /MT"
+	$(MAKE) all-tests-static
 !IF DEFINED(EXHAUSTIVE)
-	$(MAKE) all-tests-static XCFLAGS="/W3 /WX /MTd" XDBG="-debug"
+	$(MAKE) all-tests-static XDBG="-debug"
 !ENDIF
 	@ echo $@ completed successfully.
 
 VCE:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VCEFLAGS) /MD /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_CXX pthreadVCE$(PTW32_VER).dll
+	@ $(MAKE) /E /nologo XCFLAGS="/MD" EHFLAGS="$(VCEFLAGS) /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_CXX pthreadVCE$(PTW32_VER).dll
 
 VCE-debug:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VCEFLAGSD) /MDd /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_CXX pthreadVCE$(PTW32_VER_DEBUG).dll
+	@ $(MAKE) /E /nologo XCFLAGS="/MDd" EHFLAGS="$(VCEFLAGSD) /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_CXX pthreadVCE$(PTW32_VER_DEBUG).dll
 
 VSE:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VSEFLAGS) /MD /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_SEH pthreadVSE$(PTW32_VER).dll
+	@ $(MAKE) /E /nologo XCFLAGS="/MD" EHFLAGS="$(VSEFLAGS) /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_SEH pthreadVSE$(PTW32_VER).dll
 
 VSE-debug:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VSEFLAGSD) /MDd /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_SEH pthreadVSE$(PTW32_VER_DEBUG).dll
+	@ $(MAKE) /E /nologo XCFLAGS="/MDd" EHFLAGS="$(VSEFLAGSD) /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_SEH pthreadVSE$(PTW32_VER_DEBUG).dll
 
 VC:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VCFLAGS) /MD /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_C pthreadVC$(PTW32_VER).dll
+	@ $(MAKE) /E /nologo XCFLAGS="/MD" EHFLAGS="$(VCFLAGS) /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_C pthreadVC$(PTW32_VER).dll
 
 VC-debug:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VCFLAGSD) /MDd /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_C pthreadVC$(PTW32_VER_DEBUG).dll
+	@ $(MAKE) /E /nologo XCFLAGS="/MDd" EHFLAGS="$(VCFLAGSD) /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_C pthreadVC$(PTW32_VER_DEBUG).dll
 
 #
 # Static builds
 #
 #VCE-small-static:
-#	@ $(MAKE) /E /nologo EHFLAGS="$(VCEFLAGS) /DPTW32_STATIC_LIB" CLEANUP=__CLEANUP_CXX pthreadVCE$(PTW32_VER).small_static_stamp
+#	@ $(MAKE) /E /nologo XCFLAGS="/MT" EHFLAGS="$(VCEFLAGS) /D__PTW32_STATIC_LIB" CLEANUP=__PTW32_CLEANUP_CXX pthreadVCE$(PTW32_VER).small_static_stamp
 
 #VCE-small-static-debug:
-#	@ $(MAKE) /E /nologo EHFLAGS="$(VCEFLAGSD) /DPTW32_STATIC_LIB" CLEANUP=__CLEANUP_CXX pthreadVCE$(PTW32_VER_DEBUG).small_static_stamp
+#	@ $(MAKE) /E /nologo XCFLAGS="/MTd" EHFLAGS="$(VCEFLAGSD) /D__PTW32_STATIC_LIB" CLEANUP=__PTW32_CLEANUP_CXX pthreadVCE$(PTW32_VER_DEBUG).small_static_stamp
 
 #VSE-small-static:
-#	@ $(MAKE) /E /nologo EHFLAGS="$(VSEFLAGS) /DPTW32_STATIC_LIB" CLEANUP=__CLEANUP_SEH pthreadVSE$(PTW32_VER).small_static_stamp
+#	@ $(MAKE) /E /nologo XCFLAGS="/MT" EHFLAGS="$(VSEFLAGS) /D__PTW32_STATIC_LIB" CLEANUP=__PTW32_CLEANUP_SEH pthreadVSE$(PTW32_VER).small_static_stamp
 
 #VSE-small-static-debug:
-#	@ $(MAKE) /E /nologo EHFLAGS="$(VSEFLAGSD) /DPTW32_STATIC_LIB" CLEANUP=__CLEANUP_SEH pthreadVSE$(PTW32_VER_DEBUG).small_static_stamp
+#	@ $(MAKE) /E /nologo XCFLAGS="/MTd" EHFLAGS="$(VSEFLAGSD) /D__PTW32_STATIC_LIB" CLEANUP=__PTW32_CLEANUP_SEH pthreadVSE$(PTW32_VER_DEBUG).small_static_stamp
 
 #VC-small-static:
-#	@ $(MAKE) /E /nologo EHFLAGS="$(VCFLAGS) /DPTW32_STATIC_LIB" CLEANUP=__CLEANUP_C pthreadVC$(PTW32_VER).small_static_stamp
+#	@ $(MAKE) /E /nologo XCFLAGS="/MT" EHFLAGS="$(VCFLAGS) /D__PTW32_STATIC_LIB" CLEANUP=__PTW32_CLEANUP_C pthreadVC$(PTW32_VER).small_static_stamp
 
 #VC-small-static-debug:
-#	@ $(MAKE) /E /nologo EHFLAGS="$(VCFLAGSD) /DPTW32_STATIC_LIB" CLEANUP=__CLEANUP_C pthreadVC$(PTW32_VER_DEBUG).small_static_stamp
+#	@ $(MAKE) /E /nologo XCFLAGS="/MTd" EHFLAGS="$(VCFLAGSD) /D__PTW32_STATIC_LIB" CLEANUP=__PTW32_CLEANUP_C pthreadVC$(PTW32_VER_DEBUG).small_static_stamp
 
 VCE-static:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VCEFLAGS) /MT /DPTW32_STATIC_LIB /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_CXX pthreadVCE$(PTW32_VER).inlined_static_stamp
+	@ $(MAKE) /E /nologo XCFLAGS="/MT" EHFLAGS="$(VCEFLAGS) /D__PTW32_STATIC_LIB /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_CXX pthreadVCE$(PTW32_VER).inlined_static_stamp
 
 VCE-static-debug:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VCEFLAGSD) /MTd /DPTW32_STATIC_LIB /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_CXX pthreadVCE$(PTW32_VER_DEBUG).inlined_static_stamp
+	@ $(MAKE) /E /nologo XCFLAGS="/MTd" EHFLAGS="$(VCEFLAGSD) /D__PTW32_STATIC_LIB /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_CXX pthreadVCE$(PTW32_VER_DEBUG).inlined_static_stamp
 
 VSE-static:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VSEFLAGS) /MT /DPTW32_STATIC_LIB /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_SEH pthreadVSE$(PTW32_VER).inlined_static_stamp
+	@ $(MAKE) /E /nologo XCFLAGS="/MT" EHFLAGS="$(VSEFLAGS) /D__PTW32_STATIC_LIB /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_SEH pthreadVSE$(PTW32_VER).inlined_static_stamp
 
 VSE-static-debug:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VSEFLAGSD) /MTd /DPTW32_STATIC_LIB /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_SEH pthreadVSE$(PTW32_VER_DEBUG).inlined_static_stamp
+	@ $(MAKE) /E /nologo XCFLAGS="/MTd" EHFLAGS="$(VSEFLAGSD) /D__PTW32_STATIC_LIB /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_SEH pthreadVSE$(PTW32_VER_DEBUG).inlined_static_stamp
 
 VC-static:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VCFLAGS) /MT /DPTW32_STATIC_LIB /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_C pthreadVC$(PTW32_VER).inlined_static_stamp
+	@ $(MAKE) /E /nologo XCFLAGS="/MT" EHFLAGS="$(VCFLAGS) /D__PTW32_STATIC_LIB /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_C pthreadVC$(PTW32_VER).inlined_static_stamp
 
 VC-static-debug:
-	@ $(MAKE) /E /nologo EHFLAGS="$(VCFLAGSD) /MTd /DPTW32_STATIC_LIB /DPTW32_BUILD_INLINED" CLEANUP=__CLEANUP_C pthreadVC$(PTW32_VER_DEBUG).inlined_static_stamp
+	@ $(MAKE) /E /nologo XCFLAGS="/MTd" EHFLAGS="$(VCFLAGSD) /D__PTW32_STATIC_LIB /D__PTW32_BUILD_INLINED" CLEANUP=__PTW32_CLEANUP_C pthreadVC$(PTW32_VER_DEBUG).inlined_static_stamp
 
 
 realclean: clean
@@ -197,7 +197,7 @@ realclean: clean
 	if exist *.a del *.a
 	if exist *.manifest del *.manifest
 	if exist make.log.txt del make.log.txt
-	cd tests && $(MAKE) clean
+	cd tests && $(MAKE) realclean
 
 clean:
 	if exist *.obj del *.obj
@@ -210,6 +210,7 @@ clean:
 	if exist *.i del *.i
 	if exist *.res del *.res
 	if exist *_stamp del *_stamp
+	cd tests && $(MAKE) clean
 
 # Very basic install. It assumes "realclean" was done just prior to build target.
 install:
@@ -238,10 +239,10 @@ $(SMALL_STATIC_STAMPS): $(STATIC_OBJS_SMALL)
 	echo. >$@
 
 .c.obj:
-	$(CC) $(EHFLAGS) /D$(CLEANUP) -c $<
+	$(CC) $(XCFLAGS) $(EHFLAGS) /D$(CLEANUP) -c $<
 
 .c.o:
-	$(CC) $(EHFLAGS) /D$(CLEANUP) -c $< /Fo$@
+	$(CC) $(XCFLAGS) $(EHFLAGS) /D$(CLEANUP) /Fo$*.$(OEXT) -c $<
 
 # TARGET_CPU is an environment variable set by Visual Studio Command Prompt
 # as provided by the SDK (VS 2010 Express plus SDK 7.1)
@@ -252,14 +253,14 @@ $(SMALL_STATIC_STAMPS): $(STATIC_OBJS_SMALL)
 .rc.res:
 !IF DEFINED(PLATFORM)
 !  IF DEFINED(PROCESSOR_ARCHITECTURE)
-	  rc /dPTW32_ARCH$(PROCESSOR_ARCHITECTURE) /dPTW32_RC_MSC /d$(CLEANUP) $<
+	  rc /d__PTW32_ARCH$(PROCESSOR_ARCHITECTURE) /d__PTW32_RC_MSC /d$(CLEANUP) $<
 !  ELSE
-	  rc /dPTW32_ARCH$(PLATFORM) /dPTW32_RC_MSC /d$(CLEANUP) $<
+	  rc /d__PTW32_ARCH$(PLATFORM) /d__PTW32_RC_MSC /d$(CLEANUP) $<
 !  ENDIF
 !ELSE IF DEFINED(TARGET_CPU)
-	rc /dPTW32_ARCH$(TARGET_CPU) /dPTW32_RC_MSC /d$(CLEANUP) $<
+	rc /d__PTW32_ARCH$(TARGET_CPU) /d__PTW32_RC_MSC /d$(CLEANUP) $<
 !ELSE
-	rc /dPTW32_ARCHx86 /dPTW32_RC_MSC /d$(CLEANUP) $<
+	rc /d__PTW32_ARCHx86 /d__PTW32_RC_MSC /d$(CLEANUP) $<
 !ENDIF
 
 .c.i:
